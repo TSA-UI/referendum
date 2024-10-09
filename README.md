@@ -30,53 +30,33 @@ Saat ini, aplikasi ini dirancang untuk pecinta steak berbasis Jakarta. Dataset y
 
 # Daftar Modul
 1. **Autentikasi**
+   - Pengguna register dan membuat akun (username, name, role, password and password confirmation)
    - Pengguna melakukan aktivitas login dan logout.
-   - Aktivitas login dapat melalui Google, Facebook, dan Apple.
-   - Profil pengguna menyimpan informasi seperti:
-       - Preferensi pribadi (tingkat kematangan steak dan jenis daging favorit)
-       - Riwayat pesanan
-       - Review
-   - Terdapat fitur wishlist yang memungkinkan pengguna untuk menyimpan menu yang ingin dicoba.
-   - Terdapat tracking reward program atau poin loyalitas yang diberikan berdasarkan pesanan dan review yang dibuat.
-   - Pada fitur riwayat pesanan, pengguna dapat melihat pesanan sebelumnya dan memesan kembali menu favorit.
 
-2. **Spin the Wheel - “Makan apa hari ini”**
+2. **Spin the Wheel - “Makan apa hari ini”** (Customer)
    - Pengguna melakukan _spin wheel_ yang disesuaikan dengan preferensi pribadi terakhir.
+   - Pilih jenis preferensi beef untuk add all, atau add manual makanan yang akan di-spin
    - Pengguna dapat menambah atau menghapus daftar menu yang dijadikan opsi pada _spin wheel_
-   - Hasil _spin_ dapat disimpan sebagai rekomendasi menu.
-   - Pengguna dapat membagikan hasil _spin_ ke sosial media.
 
-3. **Menu dan Filter Menu**
+3. **Explore Menu** (Customer, Admin)
    - Pengguna dapat memfilter menu berdasarkan:
-     - Rasa (manis, gurih)
-     - Tingkat kematangan steak
-     - Jenis saus (BBQ, jamur, lada hitam)
-     - Side dish (kentang, salad)
-     - Harga per porsi
-     - Asal daging (lokal atau impor)
-     - Metode masak (grill, pan-seared, sous-vide)
+     - Jenis beef
+     - Kota
+     - Range rating
+     - Search bar untuk nama menu
 
-4. **Rating dan Review**
+4. **Rating dan Review** (Customer, Admin)
    - Pengguna dapat memberikan _review_ dan _rating_ pada setiap menu yang telah dicoba.
-   - Review dapat dilengkapi dengan foto menu yang dipesan.
    - Terdapat fitur _upvote_ dan _downvote_ untuk review pengguna lain.
-   - Terdapat _reward_ yang diberikan kepada pengguna yang paling aktif dalam memberikan _review_, misalnya "Steak Expert" atau "Meat Lover".
 
-5. **Make it by Yourself**
-   - Fitur ini memungkinkan pengguna memilih menu steak yang dapat dimasak sendiri di rumah dengan filter berdasarkan jenis daging.
-   - Pengguna dapat membuat daftar belanja bahan steak dan langsung memesan bahan dari aplikasi.
-   - Terdapat estimasi biaya bahan-bahan yang dibutuhkan.
-   - Terdapat fitur video tutorial cara memasak steak dari chef atau konten kreator.
-
-6. **MeatUp - Teman Makan**
+5. **MeatUp - Teman Makan** (Customer)
    - Pengguna dapat membuat "public wishlist" tentang menu yang berencana ingin dimakan.
    - Pengguna lain dengan wishlist serupa dapat saling terhubung sehingga mereka dapat berdiskusi tentang menu yang ingin dicoba.
-   - Terdapat fitur book together yang memungkinkan beberapa pengguna untuk melakukan pemesanan secara bersamaan.
 
-7. **Booking restoran**
+6. **Booking Restoran** (Customer, Pemilik Restoran)
    - Booking dilakukan berdasarkan restoran, nama pemesan, dan jumlah orang.
    - Pengguna memesan berdasarkan jumlah porsi.
-   - Dikolaborasikan dengan fitur MeatUp untuk beberapa pengguna yang melakukan _booking_ bersamaan.
+   - Riwayat pemesanan yang sudah dilakukan.
 
 
 # Sumber Initial Dataset
@@ -89,30 +69,25 @@ Berikut sumber initial [dataset](https://www.kaggle.com/datasets/miradelimanr/st
 1. **Pengguna Umum (Customer)**
    - Akses:
      - Mengakses seluruh konten publik seperti daftar menu, informasi restoran, harga, dan ulasan.
-     - Membuat akun dan login/logout menggunakan akun Google, Facebook, atau Apple.
-   - Fitur:
-     - **Wishlist**: Menyimpan menu-menu favorit yang ingin dicoba di masa depan.
-     - **Ulasan & Rating**: Memberi rating dan review pada menu yang sudah dicoba, serta mengunggah foto makanan.
+     - Membuat akun dan login/logout menggunakan akun yang sudah dibuat
      - **Spin the Wheel**: Menggunakan fitur "spin the wheel" untuk memilih menu secara acak.
-     - **Teman Makan**: Berinteraksi dengan pengguna lain melalui "public wishlist" dan fitur in-app messaging.
+     - **MeatUp**: Menyimpan menu-menu favorit yang ingin dicoba di masa depan dan berinteraksi dengan pengguna lain.
+     - **Rating dan Review**: Memberi rating dan review pada menu yang sudah dicoba, serta mengunggah foto makanan.
      - **Booking Restoran**: Melakukan pemesanan tempat di restoran dan melihat riwayat booking.
        
 2. **Admin**
    - Akses:
      - Mengelola konten website.
    - Fitur:
-     - **Pengelolaan Menu & Restoran**: Menambah, mengedit, atau menghapus informasi tentang menunya (termasuk foto, harga, dan deskripsi).
-     - **Manajemen Ulasan**: Memoderasi ulasan pengguna, menghapus ulasan yang tidak sesuai, atau menandai ulasan yang melanggar kebijakan.
-     - **Manajemen Pengguna**: Mengelola akun pengguna, memblokir akun yang bermasalah, atau memberi hak akses khusus kepada pengguna tertentu.
-     - **Manajemen Booking**: Memantau dan mengelola booking dari seluruh _steakhouse_.
+     - **Pengelolaan Menu & Restoran**: Menambah, mengedit, atau menghapus informasi tentang menu.
+     - **Manajemen Ulasan**: Mengedit atau menghapus ulasan yang tidak sesuai.
+     - **Manajemen Pengguna**: Mengelola akun pengguna..
        
 3. **Pemilik Steakhouse**
    - Akses:
-     - Mengelola informasi khusus tentang steakhouse mereka sendiri.
+     - Mengelola proses booking restoran yang dimiliki.
    - Fitur:
-     - **Pengelolaan Menu & Harga**: Menambah, mengedit, atau menghapus menu, harga, jam operasional, dan promosi yang berlaku di _steakhouse_ mereka.
-     - **Manajemen Ulasan & Feedback**: Melihat dan menanggapi ulasan pengguna untuk restoran mereka.
-     - **Manajemen Booking**: Mengelola pemesanan dari pengguna, menerima atau menolak booking, serta menambahkan opsi pemesanan tambahan jika diperlukan untuk _steakhouse_ mereka.
+     - **Manajemen Booking**: Memantau dan mengelola booking dari seluruh _steakhouse_.
 
 
 # Tautan Deployment
