@@ -33,27 +33,27 @@ Saat ini, aplikasi ini dirancang untuk pecinta steak berbasis Jakarta. Dataset y
    - Pengguna register dan membuat akun (username, name, role, password and password confirmation)
    - Pengguna melakukan aktivitas login dan logout.
 
-2. **Spin the Wheel - “Makan apa hari ini”** (Customer)
+2. **Spin the Wheel - “Makan apa hari ini”** (Customer) : Haliza
    - Pengguna melakukan _spin wheel_ yang disesuaikan dengan preferensi pribadi terakhir.
    - Pilih jenis preferensi beef untuk add all, atau add manual makanan yang akan di-spin
    - Pengguna dapat menambah atau menghapus daftar menu yang dijadikan opsi pada _spin wheel_
 
-3. **Explore Menu** (Customer, Admin)
+3. **Explore Menu** (Customer, Admin) : Nadira
    - Pengguna dapat memfilter menu berdasarkan:
      - Jenis beef
      - Kota
      - Range rating
      - Search bar untuk nama menu
 
-4. **Rating dan Review** (Customer, Admin)
+4. **Rating dan Review** (Customer, Admin) : Clara
    - Pengguna dapat memberikan _review_ dan _rating_ pada setiap menu yang telah dicoba.
    - Terdapat fitur _upvote_ dan _downvote_ untuk review pengguna lain.
 
-5. **MeatUp - Teman Makan** (Customer)
+5. **MeatUp - Teman Makan** (Customer) : Aimee
    - Pengguna dapat membuat "public wishlist" tentang menu yang berencana ingin dimakan.
    - Pengguna lain dengan wishlist serupa dapat saling terhubung sehingga mereka dapat berdiskusi tentang menu yang ingin dicoba.
 
-6. **Booking Restoran** (Customer, Pemilik Restoran)
+6. **Booking Restoran** (Customer, Pemilik Restoran) : Faizi
    - Booking dilakukan berdasarkan restoran, nama pemesan, dan jumlah orang.
    - Pengguna memesan berdasarkan jumlah porsi.
    - Riwayat pemesanan yang sudah dilakukan.
@@ -91,5 +91,5 @@ Berikut sumber initial [dataset](https://www.kaggle.com/datasets/miradelimanr/st
 
 
 # Tautan Deployment
-Tautan deployment aplikasi **setaksetik**. <br>
-http://muhammad-faizi-setaksetik.pbp.cs.ui.ac.id/
+Tautan deployment aplikasi [**setaksetik**](http://muhammad-faizi-setaksetik.pbp.cs.ui.ac.id/).
+
