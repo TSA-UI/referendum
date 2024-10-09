@@ -116,4 +116,5 @@ Berikut sumber initial [dataset](https://www.kaggle.com/datasets/miradelimanr/st
 
 
 # Tautan Deployment
-Tautan deployment aplikasi **setaksetik**.
+Tautan deployment aplikasi **setaksetik**. <br>
+http://muhammad-faizi-setaksetik.pbp.cs.ui.ac.id/
