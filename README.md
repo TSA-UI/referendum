@@ -104,7 +104,7 @@ Berikut sumber initial [dataset](https://www.kaggle.com/datasets/miradelimanr/st
      - **Pengelolaan Menu & Restoran**: Menambah, mengedit, atau menghapus informasi tentang menunya (termasuk foto, harga, dan deskripsi).
      - **Manajemen Ulasan**: Memoderasi ulasan pengguna, menghapus ulasan yang tidak sesuai, atau menandai ulasan yang melanggar kebijakan.
      - **Manajemen Pengguna**: Mengelola akun pengguna, memblokir akun yang bermasalah, atau memberi hak akses khusus kepada pengguna tertentu.
-       **Manajemen Booking**: Memantau dan mengelola booking dari seluruh _steakhouse_.
+     - **Manajemen Booking**: Memantau dan mengelola booking dari seluruh _steakhouse_.
        
 3. **Pemilik Steakhouse**
    - Akses:
