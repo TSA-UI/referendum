@@ -20,4 +20,11 @@ from django.urls import path, include
 urlpatterns = [
     path('', include('main.urls')),
     path('admin/', admin.site.urls),
+<<<<<<<<< Temporary merge branch 1
+    path('explore/', include('explore.urls')),
 ]
+=========
+    path('', include('main.urls')),
+    # path('spinthewheel/', include('spinthewheel.urls')),
+]
+>>>>>>>>> Temporary merge branch 2
