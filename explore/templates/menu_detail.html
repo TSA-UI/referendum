@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block meta %}
+<title>Menu Steak</title>
+{% endblock meta %}
+
+{% block content %}
+<div class="container mx-auto mt-6 p-6 bg-white rounded shadow-lg">
+    <img class="w-[12.5%] max-w-md" src="{{ menu.image }}" alt="{{ menu.menu }}">
+    <br>
+    <h1 class="text-2xl font-bold mb-4">{{ menu.menu }}</h1>
+    <p><strong>Category:</strong> {{ menu.category }}</p>
+    <p><strong>Price:</strong> Rp {{ menu.price }}</p>
+    <p><strong>Restaurant:</strong> {{ menu.restaurant_name }}</p>
+    <p><strong>City:</strong> {{ menu.city }}</p>
+    <p><strong>Specialized in:</strong> {{ menu.specialized }}</p>
+    <p><strong>Rating:</strong> {{ menu.rating }}</p>
+    <br>
+</div>
+{% endblock content %}
+
+{% block script %}
+{% endblock script %}
