@@ -6,5 +6,5 @@ app_name = "explore"
 urlpatterns = [
     #path("", get_menu, ),
     path("", show_menu, name='show_menu'),
-    path("", menu_detail, name='menu_detail'),
+    path("detail/", menu_detail, name='menu_detail'),
 ]
