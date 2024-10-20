@@ -1,0 +1,402 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="header text-center mt-2 mb-2">
+    <h1 class="text-4xl serif">
+        <span class="italic">Bingung</span> makan apa?
+    </h1>    
+    <div class="border-t-2 border-[beige] mt-3 mx-auto w-1/3"></div>
+    <p id="winner" class="text-2xl text-[beige] mt-2">Spin aja!</p>
+</div>
+
+<style>
+    .header{
+        padding: 20px;
+        color: #fff;
+        margin: 0 auto;
+        margin-bottom: 0px;
+        }
+    .header h1,p{
+        text-align: center;
+    }
+
+    .wheel{
+        display: flex;
+        justify-content: center;
+        position: relative;
+    }
+    .center-circle{
+        width: 80px;
+        height: 80px;
+        border-radius: 60px;
+        background-color: #fff;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    .triangle{
+        width: 0; 
+        height: 0; 
+        border-top: 20px solid transparent;
+        border-bottom: 20px solid transparent; 
+        border-right: 50px solid white; 
+        position: absolute;
+        top: 50%;
+        right: -280%;
+        transform: translateY(-50%);
+        }
+
+    #categoryFilter {
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        text-transform: uppercase;
+    }
+
+    #categoryFilter option {
+        font-family: 'Raleway', sans-serif;
+        font-style: none;
+        text-transform: none;
+    }
+
+    #categoryFilter:hover {
+        background-color: #5B3E39;
+    }
+
+    #categoryFilter option:hover {
+        background-color: #5B3E39;
+        color: #FFFFFF;
+    }
+</style>
+
+<div class="main-container flex justify-center items-start w-full mb-5">
+    <!-- The Wheel -->
+    <div class="wheel mx-auto">
+        <canvas id="canvas" width="500" height="500"></canvas>
+        <div class="center-circle" onclick="spin()">
+            <div class="triangle"></div>
+        </div>
+    </div>
+
+    <!-- The Menus -->
+    <div class="menu-container w-1/3 mr-20">
+        <form method="POST" id="filterForm">
+
+            <div class="flex space-x-0 mt-5">
+                {% csrf_token %}
+                <select id="categoryFilter" name="category" class="w-full p-3 rounded mr-5" style="background-color: #3E2723; border: 3;" >
+                    {% for category in categories %}
+                        <option value="{{ category }}" {% if category == selected_category %} selected {% endif %}>
+                            {{ category }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="mt-2 w-full p-3 text-lg rounded" style="font-family: 'Playfair', serif; font-style: italic; transition: color 0.3s;" onmouseover="this.style.color='#FFD54F'" onmouseout="this.style.color=''" >
+                    Filter Category
+                </button>
+                <input type="hidden" name="items_in_wheel" id="itemsInWheel" value="{{ items_in_wheel|join:',' }}">
+            </div>
+
+        </form>
+
+        <!-- Menu list -->
+        <div id="menuList" class="mt-5 h-80 overflow-y-auto rounded">
+            {% for menu_item in menu_items %}
+                <div class="flex justify-between items-center p-2 pl-4 pr-4 mt-2 rounded" style="background-color: #F5F5DC">
+                    <span style="color: #3E2723; font-weight: 600;">{{ menu_item.menu }}</span>
+                    <button id="addButton-{{ menu_item.id }}" type="button" onclick="addToWheel('{{ menu_item.menu }}', '{{ menu_item.id }}')" class="p-2 rounded hover:bg-stone-100" style="background-color: #5b3e39">
+                        Add
+                    </button>
+                </div>
+            {% endfor %}
+        </div>
+
+        <button type="button" class="mt-2 w-full p-3 text-lg rounded" style="font-family: 'Playfair', serif; font-style: italic; transition: color 0.3s;" onmouseover="this.style.color='#FFD54F'" onmouseout="this.style.color=''" onclick="clearAll()">
+            Clear Wheel
+        </button>
+    </div>
+</div>
+
+<!-- Spin History -->
+<div id="spinHistoryContainer" class="mt-5"> </div>
+
+
+<!-- Winner Modal -->
+<div id="winnerModal" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+    <div class="bg-white rounded-lg p-6 shadow-lg">
+        <h2 class="text-2xl mb-4">Winner!</h2>
+        <p id="winnerName" class="text-lg"></p>
+        <div class="flex justify-between mt-4">
+            <button id="addSpinHistoryBtn" class="bg-green-500 text-white rounded-lg px-4 py-2">Add to Spin History</button>
+            <button id="closeModalBtn" class="bg-red-500 text-white rounded-lg px-4 py-2" onclick="hideWinnerModal()">Close without Adding</button>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Script of helper wheel functions -->
+<script>
+    function toRad(deg){
+        return deg * (Math.PI / 180.0);
+    }
+    function randomRange(min,max){
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    function easeOutSine(x) {
+        return Math.sin((x * Math.PI) / 2);
+    }
+    
+    function getPercent(input,min,max){
+        return (((input - min) * 100) / (max - min))/100
+    }
+</script>
+
+
+<!-- Script to handle spinning the wheel, adding items, and clearing all items -->
+<script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    const width = document.getElementById("canvas").width;
+    const height = document.getElementById("canvas").height;
+
+    const centerX = width / 2;
+    const centerY = height / 2;
+    const radius = width / 2;
+
+    let items = "{{ items_in_wheel|join:',' }}".split(',').filter(Boolean);
+
+    let currentDeg = 0;
+    let colors = [];
+    let step = 360 / items.length;
+    let itemDegs = {}
+
+    // Function to add menu item to the wheel
+    function addToWheel(menuName, menuId) {
+        if (!items.includes(menuName)) {
+            items.push(menuName);  
+            document.getElementById('itemsInWheel').value = items.join(',');
+            createWheel();  // Redraw the wheel
+
+            let addButton = document.getElementById(`addButton-${menuId}`);
+            addButton.innerHTML = "Added"
+            addButton.style.backgroundColor = '#F5F5DC'
+            addButton.style.color = '#3E2723'
+            addButton.style.fontStyle = 'italic'
+            addButton.disabled = true
+        }
+    }
+
+    // Function to clear all items from the wheel
+    function clearAll() {
+        items = [];
+        document.getElementById('itemsInWheel').value = ''; 
+        createWheel(); 
+
+        let addButtons = document.querySelectorAll('button[id^="addButton-"]');
+        addButtons.forEach(button => {
+            button.innerHTML = "Add";
+            button.classList.remove('bg-gray-600');
+            button.classList.add('bg-green-600', 'hover:bg-green-700');
+            button.disabled = false;
+        });
+    }
+
+    
+    // Function to create and redraw the wheel
+    function createWheel() {
+        const baseColors = [
+        {r: 132, g: 35, b: 35},     // 842323 (Red)
+        {r: 255, g: 213, b: 79},    // FFD54F (Yellow)
+        {r: 62, g: 39, b: 35}       // 3E2723 (Brown)
+        ];
+
+        const bufferColor = {r: 245, g: 245, b: 220};  // F5F5DC (Beige)
+        colors = [];
+        let numItems = items.length;
+        step = 360 / numItems;
+
+        const useBuffer = (numItems - 4) % 3 === 0;
+
+        let colorIndex = 0;
+        let patternPosition = 4;
+
+        for (let i = 0; i < numItems; i++) {
+            if (useBuffer && i + 1 === patternPosition) {
+                colors.push(bufferColor);
+                patternPosition += 3;
+            } else {
+                colors.push(baseColors[colorIndex]);
+                colorIndex = (colorIndex + 1) % baseColors.length;
+            }
+        }
+
+        draw();
+    }
+    draw()
+
+    // Drawing function of the wheel
+    function draw() {
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, toRad(0), toRad(360));
+        ctx.fillStyle = 'rgb(62,39,35)';
+        ctx.fill();
+
+        let startDeg = currentDeg;
+        for (let i = 0; i < items.length; i++, startDeg += step) {
+            let endDeg = startDeg + step
+
+            color = colors[i]
+            let colorStyle = `rgb(${color.r},${color.g},${color.b})`
+
+            ctx.beginPath();
+            rad = toRad(360/step);
+            ctx.arc(centerX, centerY, radius - 2, toRad(startDeg), toRad(endDeg))
+            let colorStyle2 = `rgb(${color.r - 30},${color.g - 30},${color.b - 30})`
+            ctx.fillStyle = colorStyle2
+            ctx.lineTo(centerX, centerY);
+            ctx.fill()
+
+            ctx.beginPath();
+            rad = toRad(360/step);
+            ctx.arc(centerX, centerY, radius - 30, toRad(startDeg), toRad(endDeg))
+            ctx.fillStyle = colorStyle
+            ctx.lineTo(centerX, centerY);
+            ctx.fill()
+
+            // draw text
+            ctx.save();
+            ctx.translate(centerX, centerY);
+            ctx.rotate(toRad((startDeg + endDeg)/2));
+            ctx.textAlign = "center";
+            if(color.r > 150 || color.g > 150 || color.b > 150){
+                ctx.fillStyle = "#000";
+            }
+            else{
+                ctx.fillStyle = "#fff";
+            }
+            ctx.font = '20px Raleway';
+            ctx.fillText(items[i].substring(0, 17), 130, 10);
+            ctx.restore();
+
+            itemDegs[items[i]] = 
+                {
+                "startDeg": startDeg,
+                "endDeg" : endDeg
+                }
+            
+
+            // Check winner
+            if(startDeg%360 < 360 && startDeg%360 > 270  && endDeg % 360 > 0 && endDeg%360 < 90 ){
+                document.getElementById("winner").innerHTML = items[i]
+            }
+        }
+    }
+
+    // Spinning logic
+    let speed = 0;
+    let maxRotation = randomRange(360 * 3, 360 * 6);
+    let pause = false;
+
+    function animate() {
+        if (pause) return
+
+        speed = easeOutSine(getPercent(currentDeg, maxRotation, 0)) * 20;
+        if (speed < 0.01) {
+            speed = 0;
+            pause = true;
+
+            let winner = '';
+            for (let item in itemDegs) {
+                if (currentDeg % 360 >= itemDegs[item].startDeg && currentDeg % 360 <= itemDegs[item].endDeg) {
+                    winner = item;  // Set winner based on angle
+                    console.log(`Winner determined: ${winner}`); // Debug log
+                    break;
+                }
+            }
+            
+            showWinnerModal(winner);
+
+        }
+        currentDeg += speed;
+        draw();
+        window.requestAnimationFrame(animate);
+        
+    }
+
+    function spin() {
+        if(speed != 0){
+                return
+            }
+
+            currentDeg = 0
+            
+            maxRotation = randomRange(360 * 3, 360 * 6)
+            pause = false
+            window.requestAnimationFrame(animate);
+    }
+
+</script>
+
+<!-- Script to show winner and add to history with AJAX -->
+<script>
+    const addSpinHistoryBtn = document.getElementById("addSpinHistoryBtn");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+
+    function showWinnerModal(winnerName) {
+        console.log(`Showing modal with winner: ${winnerName}`); // Debug log
+        document.getElementById("winnerName").innerText = winnerName;
+        document.getElementById("winnerModal").classList.remove("hidden");
+    }
+
+    function hideWinnerModal() {
+        document.getElementById("winnerModal").classList.add("hidden");
+    }
+
+    function addToSpinHistory() {
+        const winner = document.getElementById("winner").innerText;
+        const formData = new FormData();
+        formData.append("winner", winner);
+
+        fetch('/add_spin_history/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Winner added to spin history!');
+                updateSpinHistory(winner);
+                hideWinnerModal();
+            } else {
+                alert('Failed to add winner to spin history.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function updateSpinHistory(winner) {
+        const historyContainer = document.getElementById('spinHistoryContainer');
+        const now = new Date();
+        const date = now.toLocaleString();
+
+        // Create a new card element for the spin history
+        const historyItem = document.createElement('div');
+        historyItem.classList.add('card', 'my-2', 'p-2', 'bg-gray-800', 'text-white');
+        historyItem.innerHTML = `<strong>${date}</strong> - ${winner}`;
+
+        // Append the new history item to the container
+        historyContainer.prepend(historyItem);
+    }
+
+    document.getElementById("addSpinHistoryBtn").addEventListener("click", () => {
+        console.log("Add to Spin History button clicked!");
+        addToSpinHistory();
+        hideWinnerModal();
+    });
+
+</script>
+{% endblock %}

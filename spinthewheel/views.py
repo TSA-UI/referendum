@@ -1,53 +1,52 @@
 from django.shortcuts import render, redirect
-from .models import Menu, Option, SpinHistory
-import random
+from explore.models import Menu
+from .models import Option, SpinHistory
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.http import HttpResponse
 import json
-from django.http import JsonResponse
 
+@login_required(login_url='/login')
 def menu_view(request):
-    category = request.GET.get('category', None)
-    if category:
+    # Default selected category is 'All Categories'
+    category = request.POST.get('category', 'All Categories')
+    categories = ['All Categories', 'Beef', 'Chicken', 'Fish', 'Lamb', 'Pork', 'Rib Eye', 'Sirloin', 'Tenderloin', 'T-Bone', 'Wagyu', 'Other']
+
+    # Filter menu items based on selected category
+    if category != 'All Categories':
         menu_items = Menu.objects.filter(category=category)
     else:
         menu_items = Menu.objects.all()
 
-    options = Option.objects.all()
-    context = {
-        'menu_items': menu_items,
-        'options': options,
-        'category': category,
-    }
-    return render(request, 'menu.html', context)
+    for menu_item in menu_items:
+        Option.objects.get_or_create(menu=menu_item)
 
-# API to add items to the options (AJAX request)
-def add_to_options(request, menu_id):
-    menu_item = Menu.objects.get(id=menu_id)
-    Option.objects.create(menu=menu_item)
-    return JsonResponse({"status": "success", "menu_name": menu_item.name})
-
-# API to handle the spinning action
-def spin_wheel_view(request):
-    menu_items = Menu.objects.all()  # Get all menu items
-    categories = Menu.objects.values_list('category', flat=True).distinct()  # Get unique categories
-    spin_history = SpinHistory.objects.all().order_by('-spin_time')  # Get spin history
+    options = Option.objects.filter(menu__in=menu_items)
 
     context = {
         'menu_items': menu_items,
         'categories': categories,
-        'spin_history': spin_history,
+        'selected_category': category,
+        'options': options, 
     }
-    return render(request, 'spinthewheel.html', context)
-
-def spin_wheel(request):
-    options = Option.objects.all()
-    if options:
-        selected_option = random.choice(options)
-        SpinHistory.objects.create(selected_option=selected_option.menu)
-        Option.objects.all().delete()  # Clear options after spin
-        return JsonResponse({"winner": selected_option.menu.name})
-    return JsonResponse({"winner": None})
     
-# History view
-def spin_history(request):
-    spin_history = SpinHistory.objects.all().order_by('-spin_time')
-    return render(request, 'spin_history.html', {'spin_history': spin_history})
+    return render(request, 'lmao.html', context)
+
+@csrf_exempt
+@require_POST
+def add_spin_history(request):
+    winner = request.POST.get("winner")
+    user = request.user
+
+    # Create new SpinHistory entry
+    if winner:
+        spin_history = SpinHistory(
+            user=user,
+            winner=winner,
+        )
+        spin_history.save()
+
+        return HttpResponse(b"CREATED", status=201)
+
+    return HttpResponse(b"BAD REQUEST", status=400)
