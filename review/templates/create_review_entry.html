@@ -1,18 +1,58 @@
-{% extends 'base.html' %} 
+{% extends "base.html" %}
+{% include 'navbar.html' %}
+
+{% block meta %}
+    <title>Menu Steak</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+{% endblock meta %}
+
 {% block content %}
-<h1>Add New Review Entry</h1>
+<div class="flex container items-center align-center mx-auto flex-col" style="padding-top: 50px;"> 
+    <!-- <div class="filter-box">
+        <form id="filterForm" class="filter-form" method="GET" onsubmit="submitFilterForm()">
+            {{ form.as_p }}
+            <button type="submit" class="filter-btn">Filter</button>
+        </form>            
+    </div> -->
+    <h1 class="text-[52px] text-4xl font-reguler text-[#F5F5DC] text-center mt-8 mb-8">
+      Ingin<span class="italic"> review</span> menu apa?
+    </h1>    
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 px-4 md:px-0">
+    {% for menu in menus %}
+        <div class="max-w-md rounded overflow-hidden shadow-lg bg-[#F5F5DC] relative border">
+            <div class="relative">
+                <img class="w-full h-64 object-cover" src="{{ menu.image }}" alt="{{ menu.menu }}">
+            </div>
+            <div class="px-4 md:px-6 py-4">
+                <div class="text-xl text-[#5B3E39] font-inter font-bold mb-2">
+                    {{ menu.menu }}
+                </div>
+                <div class="text-sm text-gray-600 mb-2">
+                    {{ menu.category }}
+                </div>
+                <div class="text-sm text-gray-600 mb-4">
+                    Price: {{ menu.price }}
+                </div>
+                <div class="text-sm text-gray-600 mb-4">
+                    Restaurant: {{ menu.restaurant_name }}
+                </div>
+                <div class="text-sm text-gray-600 mb-4">
+                    City: {{ menu.city }}
+                </div>
+                <div class="text-sm text-gray-600 mb-4">
+                    Specialized: {{ menu.specialized }}
+                </div>
+                <div class="text-sm text-gray-600 mb-4">
+                    Rating: {{ menu.rating }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+{% endblock content %}
 
-<form method="POST">
-  {% csrf_token %}
-  <table>
-    {{ form.as_table }}
-    <tr>
-      <td></td>
-      <td>
-        <input type="submit" value="Tambah Review" />
-      </td>
-    </tr>
-  </table>
-</form>
-
-{% endblock %}
+{% block script %}
+<script src="/static/js/ajax_menu.js"></script>
+{% endblock script %}
