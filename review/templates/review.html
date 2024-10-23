@@ -31,13 +31,13 @@
 
   <div class="flex justify-center mt-0 mb-8"> <!--mt-4 itu margin top-->
     <a href="{% url 'review:create_review_entry' %}">
-      <button class="bg-yellow-400 text-brown-800 py-2 px-4 rounded-lg shadow-md hover:bg-yellow-500 transition duration-300">Tambah Review tanpa AJAX</button>
+      <button class="btn bg-[#F7B32B] hover:bg-[#F7A52B] text-white font-reguler py-2 px-4 rounded-lg transition duration-300">Tambah Review tanpa AJAX</button>
     </a>
-    <button data-modal-target="crudModal" data-modal-toggle="crudModal"
+    <!-- <button data-modal-target="crudModal" data-modal-toggle="crudModal"
       class="btn bg-[#F7B32B] hover:bg-[#F7A52B] text-white font-reguler py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
       onclick="showModal();">
       Tambah Review
-    </button>
+    </button> -->
   </div>
   
   <div id="review_entry_cards"></div>
@@ -70,20 +70,27 @@
       reviewEntries.forEach((item) => {
         const menu = DOMPurify.sanitize(item.fields.menu);
         const place = DOMPurify.sanitize(item.fields.place);
+        const image = DOMPurify.sanitize(item.fields.image);
         console.log(item);
         
         htmlString += `
             <div class="relative bg-[#F5F5DC] shadow-lg rounded-lg overflow-hidden mb-6">
             <!-- Product Details -->
             <div class="p-4">
+                <!-- Product Image -->
+                <div class="flex items-center space-x-4">
+                    <img id="modalImage" class="w-24 h-24 rounded-lg object-cover" src="" alt="Menu Image">
+                </div>
                 <!-- Product Name -->
                 <h3 class="font-bold text-xl text-[#5B3E39] mb-2">${item.fields.menu}</h3>
                 
                 <!-- Product Price -->
                 <div class="flex items-center space-x-2 mb-2">
-                <p class="text-xl font-semibold text-indigo-600">${item.fields.place},</p>
+                <p class="text-xl font-semibold text-indigo-600">${item.fields.place}</p>
                 </div>
                 
+                <!--Product Rating-->
+                <p class="text-xl font-semibold text-indigo-600">${item.fields.rating}</p>
                 <!-- Product Description -->
                 <p class="text-gray-600 mb-4">${item.fields.description}</p>
             </div>
