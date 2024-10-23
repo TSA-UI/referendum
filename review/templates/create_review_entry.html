@@ -34,9 +34,15 @@
                 <div class="text-sm text-gray-600 mb-2">
                     {{ menu.restaurant_name }}
                 </div>
-                <button data-modal-target="crudModal" data-modal-toggle="crudModal"
+                <button 
+                    data-modal-target="crudModal" 
+                    data-modal-toggle="crudModal"
                     class="btn bg-[#F7B32B] hover:bg-[#F7A52B] text-white font-reguler py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
-                    onclick="showModal();">
+                    onclick="showModal(this)"
+                    data-image="{{ menu.image }}"
+                    data-menu="{{ menu.menu }}"
+                    data-restaurant="{{ menu.restaurant_name }}"
+                    data-description="{{ menu.description }}">
                     Tambah Review
                 </button>
             </div>
@@ -163,16 +169,31 @@ async function refreshReviewEntries() {
   console.log(modal)
   const modalContent = document.getElementById('crudModalContent');
 
-  function showModal() {
+  function showModal(button) {
     const modal = document.getElementById('crudModal');
     const modalContent = document.getElementById('crudModalContent');
 
+    // Ambil data dari tombol yang diklik
+    const image = button.getAttribute('data-image');
+    const menu = button.getAttribute('data-menu');
+    const restaurant = button.getAttribute('data-restaurant');
+    const description = button.getAttribute('data-description');
+
+    // Perbarui konten modal dengan data yang sesuai
+    document.getElementById('menu').value = menu;
+    document.getElementById('place').value = restaurant;
+    document.getElementById('description').value = description;
+    // document.getElementById('image').value = image;
+
+
+    // Tampilkan modal
     modal.classList.remove('hidden');
     setTimeout(() => {
-      modalContent.classList.remove('opacity-0', 'scale-95');
-      modalContent.classList.add('opacity-100', 'scale-100');
+        modalContent.classList.remove('opacity-0', 'scale-95');
+        modalContent.classList.add('opacity-100', 'scale-100');
     }, 50);
   }
+
 
   function hideModal() {
     const modal = document.getElementById('crudModal');
