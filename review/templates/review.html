@@ -4,6 +4,7 @@
 {% block meta %}
 <title>Setak Setik</title>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 {% endblock meta %}
 
 {% block content %}
@@ -74,27 +75,37 @@
         console.log(item);
         
         htmlString += `
-            <div class="relative bg-[#F5F5DC] shadow-lg rounded-lg overflow-hidden mb-6">
-            <!-- Product Details -->
-            <div class="p-4">
-                <!-- Product Image -->
-                <div class="flex items-center space-x-4">
-                    <img id="modalImage" class="w-24 h-24 rounded-lg object-cover" src="" alt="Menu Image">
-                </div>
-                <!-- Product Name -->
-                <h3 class="font-bold text-xl text-[#5B3E39] mb-2">${item.fields.menu}</h3>
-                
-                <!-- Product Price -->
-                <div class="flex items-center space-x-2 mb-2">
-                <p class="text-xl font-semibold text-indigo-600">${item.fields.place}</p>
-                </div>
-                
-                <!--Product Rating-->
-                <p class="text-xl font-semibold text-indigo-600">${item.fields.rating}</p>
-                <!-- Product Description -->
-                <p class="text-gray-600 mb-4">${item.fields.description}</p>
-            </div>
-            </div>`
+          <div class="relative bg-[#F5F5DC] shadow-lg rounded-lg overflow-hidden mb-6">
+              <!-- Product Details -->
+              <div class="p-4">
+                  <!-- Product Image -->
+                  <div class="flex items-center space-x-4 mb-4">
+                      <img class="w-24 h-24 rounded-lg object-cover" src="${image}" alt="${menu}">
+                  </div>
+                  <!-- Product Name -->
+                  <h3 class="font-bold text-xl text-[#5B3E39] mb-2">${menu}</h3>
+
+                  <!-- Product Place with Pin Icon -->
+                  <div class="flex items-center space-x-2 mb-2">
+                      <i class="fas fa-map-marker-alt text-[#5B3E39]"></i>
+                      <p class="text-base font-semibold text-[#5B3E39]" style="font-family: 'Raleway', sans-serif; font-size: 16px;">
+                          ${item.fields.place}
+                      </p>
+                  </div>
+
+                  <!-- Product Rating -->
+                  <div class="flex items-center space-x-2 mb-2">
+                      <i class="fas fa-star text-yellow-400"></i>  <!-- Menampilkan satu ikon bintang -->
+                      <p class="text-base font-semibold text-[#5B3E39]" style="font-family: 'Raleway', sans-serif; font-size: 16px;">
+                          ${item.fields.rating} / 5
+                      </p>
+                  </div>
+                  
+                  <!-- Product Description -->
+                  <p class="text-gray-600 mb-4">${item.fields.description}</p>
+              </div>
+          </div>`;
+
 
       });
     }
