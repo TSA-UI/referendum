@@ -40,9 +40,9 @@ INSTALLED_APPS = [
     'main',
     'explore',
     'spinthewheel',
-    # 'review',
+    'review',
     'meatup',
-    # 'booking'
+    'booking'
 ]
 
 MIDDLEWARE = [
