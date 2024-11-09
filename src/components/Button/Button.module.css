@@ -1,0 +1,70 @@
+/* Button.module.css */
+.button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Gaya untuk tombol primary */
+  .primary {
+    background-color: #006442;
+  }
+  
+  .primary:hover {
+    background-color: #005035;
+  }
+  
+  .primary:active {
+    background-color: #005035;
+  }
+  
+  .primary:disabled {
+    background-color: #E6F0EC;
+    cursor: not-allowed;
+  }
+  
+  /* Gaya untuk tombol secondary */
+  .secondary {
+    background-color: #E6F0EC;
+    color: #171717;
+  }
+  
+  .secondary:hover {
+    background-color: #E6F0EC;
+  }
+  
+  .secondary:active {
+    background-color: #004B32;
+  }
+  
+  .secondary:disabled {
+    background-color: #E6F0EC;
+    color: #888888;
+    cursor: not-allowed;
+  }
+  
+  /* Gaya untuk tombol tertiary */
+  .tertiary {
+    background-color: transparent;
+    color: #006442;
+    border: 2px solid #006442;
+  }
+  
+  .tertiary:hover {
+    background-color: #e6f2ed;
+  }
+  
+  .tertiary:active {
+    background-color: #cce5db;
+  }
+  
+  .tertiary:disabled {
+    color: #cccccc;
+    border-color: #cccccc;
+    cursor: not-allowed;
+  }
+  

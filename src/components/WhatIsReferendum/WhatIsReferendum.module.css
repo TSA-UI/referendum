@@ -1,0 +1,50 @@
+.container {
+  display: flex;
+  width: 100%; /* Ubah dari 1280px ke 100% */
+  max-width: 1280px; /* Tetap batasi lebar maksimum */
+  flex-direction: column;
+  align-items: center;
+  gap: 5rem; /* Gunakan rem atau % untuk responsivitas */
+  padding: 0 1rem; /* Tambahkan padding agar tidak menempel ke tepi layar di layar kecil */
+}
+
+.title {
+  width: 90%; /* Kurangi lebar di layar besar, 90% dari kontainer */
+  max-width: 600px; /* Tentukan lebar maksimum agar terlihat rapi di layar besar */
+  border-radius: 4rem;
+  background: linear-gradient(90deg, #B3A368 100%, rgba(179, 163, 104, 0.3) 20%, #B3A368 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 1rem; /* Tambahkan padding untuk memberi ruang di sekitar teks */
+}
+
+.description {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: justify; /* Menambahkan rata kiri-kanan */
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+
+/* Media Query untuk layar lebih kecil */
+@media (max-width: 768px) {
+  .container {
+    gap: 2rem; /* Kurangi jarak antar elemen */
+  }
+  
+  .title {
+    width: 100%;
+    font-size: 1.5rem; /* Sesuaikan ukuran font untuk layar kecil */
+  }
+
+  .description {
+    width: 90%;
+    font-size: 1rem; /* Sesuaikan ukuran font untuk layar kecil */
+  }
+}

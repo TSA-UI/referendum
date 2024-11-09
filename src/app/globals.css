@@ -21,20 +21,61 @@ body {
 }
 
 
+
 @layer components {
   .h1-style {
-    @apply text-5xl font-[900] mb-4;
+    @apply text-[60px] font-[900] mb-4 text-[#F5F5F5];
   }
   
   .h2-style {
-    @apply text-4xl font-[500] mb-3;
-  }
-  
-  .sh1-style {
-    @apply text-2xl font-[200] mb-2;
+    @apply text-[48px] font-[900] mb-3 text-[#F5F5F5];
   }
 
-  .sh2-style {
-    @apply text-xl font-[200] mb-2;
+  .h3-style {
+    @apply text-[36px] font-[900] mb-3 text-[#F5F5F5];
+  }
+  
+  .h4-style {
+    @apply text-[30px] font-[900] mb-3 text-[#F5F5F5];
+  }
+
+  .s1-style {
+    @apply text-[52px] font-[500] mb-2 text-[#F5F5F5];
+  }
+
+  .s2-style {
+    @apply text-[44px] font-[500] mb-2 text-[#F5F5F5];
+  }
+
+  .s3-style {
+    @apply text-[36px] font-[500] mb-2 text-[#F5F5F5];
+  }
+
+  .s4-style {
+    @apply text-[30px] font-[500] mb-2 text-[#F5F5F5];
+  }
+
+  .s5-style {
+    @apply text-[24px] font-[500] mb-2 text-[#F5F5F5];
+  }
+
+  .p1-style {
+    @apply text-[48px] font-[200] mb-2 text-[#F5F5F5];
+  }
+
+  .p2-style {
+    @apply text-[24px] font-[200] mb-2 text-[#F5F5F5];
+  }
+
+  .p3-style {
+    @apply text-[30px] font-[200] mb-2 text-[#F5F5F5];
+  }
+
+  .p4-style {
+    @apply text-[24px] font-[200] mb-2 text-[#F5F5F5];
+  }
+
+  .p5-style {
+    @apply text-[20px] font-[200] mb-2 text-[#F5F5F5];
   }
 }
